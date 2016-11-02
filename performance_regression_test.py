@@ -148,10 +148,7 @@ class PerformanceRegressionTest(ClusterTester):
                 stress_queue = self.run_stress_thread(stress_cmd=base_cmd % mode, stress_num=2)
                 results = self.get_stress_results(queue=stress_queue, stress_num=2)
 
-        try:
-            self.display_results(results)
-        except:
-            pass
+        self.display_results(results)
 
     def test_read(self):
         """
