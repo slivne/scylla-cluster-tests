@@ -153,6 +153,10 @@ version: !mux
         ami_id_db_scylla: 'ami-cceedadb'
         ami_id_loader: 'ami-cceedadb'
         ami_id_monitor: 'ami-cceedadb'
+    1.5rc2.v2:
+        ami_id_db_scylla: 'ami-299b9d3e'
+        ami_id_loader: 'ami-299b9d3e'
+        ami_id_monitor: 'ami-299b9d3e'
 
 ami_id_db_scylla_desc: 'version_info'
 
