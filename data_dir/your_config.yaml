@@ -161,6 +161,10 @@ version: !mux
         ami_id_db_scylla: 'ami-3d101f2a'
         ami_id_loader: 'ami-3d101f2a'
         ami_id_monitor: 'ami-3d101f2a'
+    1.5preview.glommer.v2:
+        ami_id_db_scylla: 'ami-b8c5caaf'
+        ami_id_loader: 'ami-b8c5caaf'
+        ami_id_monitor: 'ami-b8c5caaf'
 
 ami_id_db_scylla_desc: 'version_info'
 
