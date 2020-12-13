@@ -2434,6 +2434,10 @@ class Nemesis:  # pylint: disable=too-many-instance-attributes,too-many-public-m
         self._disrupt_grow_shrink_cluster(rack=max(self.cluster.racks) + 1)
 
     def _disrupt_grow_shrink_cluster(self, rack=0):
+        self._disrupt_grow_cluster(rack)
+        self._disrupt_shrink_cluster(rack)
+
+    def _disrupt_grow_cluster(self, rack=0):
         if rack > 0:
             if not self._is_it_on_kubernetes():
                 raise UnsupportedNemesis("SCT rack functionality is implemented only on kubernetes")
@@ -2452,6 +2456,7 @@ class Nemesis:  # pylint: disable=too-many-instance-attributes,too-many-public-m
         self.log.info("Finish cluster grow")
         time.sleep(self.interval)
 
+    def _disrupt_shrink_cluster(self, rack=0):
         self._set_current_disruption("ShrinkCluster")
         self.log.info("Start shrink cluster on %s nodes", add_nodes_number)
         self.decommission_nodes(add_nodes_number, rack)
@@ -2505,14 +2510,6 @@ class Nemesis:  # pylint: disable=too-many-instance-attributes,too-many-public-m
         if not self.has_steady_run:
             self.steady_state_latency()
             self.has_steady_run = True
-        InfoEvent(message='StartEvent - start a repair by ScyllaManager').publish()
-        self.disrupt_mgmt_repair_cli()
-        InfoEvent(message='FinishEvent - Manager repair has finished').publish()
-        time.sleep(sleep_time_between_ops)
-        InfoEvent(message='Starting terminate_and_replace disruption').publish()
-        self.disrupt_terminate_and_replace_node()
-        InfoEvent(message='Finished terminate_and_replace disruption').publish()
-        time.sleep(sleep_time_between_ops)
         InfoEvent(message='Starting grow_shrink disruption').publish()
         self.disrupt_grow_shrink_cluster()
         InfoEvent(message="Finished grow_shrink disruption").publish()

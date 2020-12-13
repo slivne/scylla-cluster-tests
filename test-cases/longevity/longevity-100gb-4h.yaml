@@ -12,7 +12,7 @@ n_monitor_nodes: 1
 
 instance_type_db: 'i3.2xlarge'
 
-nemesis_class_name: 'ChaosMonkey'
+nemesis_class_name: 'NemesisSequence'
 nemesis_interval: 5
 nemesis_filter_seeds: false
 seeds_num: 3
@@ -23,3 +23,4 @@ space_node_threshold: 34424
 use_mgmt: true
 pre_create_schema: True
 sstable_size: 100
+nemesis_add_node_cnt: 9
