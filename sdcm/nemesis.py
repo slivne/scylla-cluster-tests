@@ -2457,6 +2457,7 @@ class Nemesis:  # pylint: disable=too-many-instance-attributes,too-many-public-m
         time.sleep(self.interval)
 
     def _disrupt_shrink_cluster(self, rack=0):
+        add_nodes_number = self.tester.params.get('nemesis_add_node_cnt')
         self._set_current_disruption("ShrinkCluster")
         self.log.info("Start shrink cluster on %s nodes", add_nodes_number)
         self.decommission_nodes(add_nodes_number, rack)
