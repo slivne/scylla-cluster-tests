@@ -14,7 +14,7 @@ instance_type_db: 'i3.2xlarge'
 instance_type_loader: 'c5.2xlarge'
 
 nemesis_class_name: 'NemesisSequence'
-nemesis_interval: 5
+nemesis_interval: 15
 nemesis_filter_seeds: false
 seeds_num: 3
 
