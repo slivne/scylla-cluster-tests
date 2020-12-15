@@ -2426,6 +2426,7 @@ class Nemesis:  # pylint: disable=too-many-instance-attributes,too-many-public-m
                 self.decommission_node(self.target_node)
             finally:
                 InfoEvent(message='FinishEvent - ShrinkCluster has done decommissioning a node').publish()
+            time.sleep(self.interval)
 
     def disrupt_grow_shrink_cluster(self):
         self._disrupt_grow_shrink_cluster(rack=0)
@@ -2453,8 +2454,8 @@ class Nemesis:  # pylint: disable=too-many-instance-attributes,too-many-public-m
             added_node.running_nemesis = None
             InfoEvent(message='GrowCluster - Done adding New node').publish()
             self.log.info("New node added %s", added_node.name)
+            time.sleep(self.interval)
         self.log.info("Finish cluster grow")
-        time.sleep(self.interval)
 
     def _disrupt_shrink_cluster(self, rack=0):
         add_nodes_number = self.tester.params.get('nemesis_add_node_cnt')
