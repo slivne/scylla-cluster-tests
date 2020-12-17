@@ -2512,6 +2512,7 @@ class Nemesis:  # pylint: disable=too-many-instance-attributes,too-many-public-m
         if not self.has_steady_run:
             self.steady_state_latency()
             self.has_steady_run = True
+        time.sleep(600)
         InfoEvent(message='Starting grow_shrink disruption').publish()
         self.disrupt_grow_shrink_cluster()
         InfoEvent(message="Finished grow_shrink disruption").publish()
