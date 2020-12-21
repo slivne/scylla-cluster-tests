@@ -3448,7 +3448,7 @@ class BaseScyllaCluster:  # pylint: disable=too-many-public-methods, too-many-in
         time_elapsed = time.time() - start_time
         self.log.debug('Update DB binary duration -> %s s', int(time_elapsed))
 
-    def _update_db_packages(self, new_scylla_bin, node_list):
+    def _update_db_packages(self, new_scylla_bin, node_list, stop_start = True):
         self.log.debug('User requested to update DB packages...')
 
         def update_scylla_packages(node, _queue):
@@ -3475,26 +3475,30 @@ class BaseScyllaCluster:  # pylint: disable=too-many-public-methods, too-many-in
         start_time = time.time()
 
         if len(node_list) == 1:
-            # Stop only new nodes
-            self.run_func_parallel(func=stop_scylla, node_list=node_list)  # pylint: disable=no-member
+            if (stop_start):
+               # Stop only new nodes
+               self.run_func_parallel(func=stop_scylla, node_list=node_list)  # pylint: disable=no-member
             # Then, update packages only on requested node
             self.run_func_parallel(func=update_scylla_packages, node_list=node_list)  # pylint: disable=no-member
-            # Start new nodes
-            self.run_func_parallel(func=start_scylla, node_list=node_list)  # pylint: disable=no-member
+            if (stop_start):
+               # Start new nodes
+               self.run_func_parallel(func=start_scylla, node_list=node_list)  # pylint: disable=no-member
         else:
-            # First, stop *all* non seed nodes
-            self.run_func_parallel(func=stop_scylla, node_list=self.non_seed_nodes)  # pylint: disable=no-member
-            # First, stop *all* seed nodes
-            self.run_func_parallel(func=stop_scylla, node_list=self.seed_nodes)  # pylint: disable=no-member
+            if (stop_start):
+               # First, stop *all* non seed nodes
+               self.run_func_parallel(func=stop_scylla, node_list=self.non_seed_nodes)  # pylint: disable=no-member
+               # First, stop *all* seed nodes
+               self.run_func_parallel(func=stop_scylla, node_list=self.seed_nodes)  # pylint: disable=no-member
             # Then, update packages only on requested nodes
             self.run_func_parallel(func=update_scylla_packages, node_list=node_list)  # pylint: disable=no-member
-            # Start all seed nodes
-            self.run_func_parallel(func=start_scylla, node_list=self.seed_nodes)  # pylint: disable=no-member
-            # Start all non seed nodes
-            self.run_func_parallel(func=start_scylla, node_list=self.non_seed_nodes)  # pylint: disable=no-member
+            if (stop_start):
+               # Start all seed nodes
+               self.run_func_parallel(func=start_scylla, node_list=self.seed_nodes)  # pylint: disable=no-member
+               # Start all non seed nodes
+               self.run_func_parallel(func=start_scylla, node_list=self.non_seed_nodes)  # pylint: disable=no-member
 
         time_elapsed = time.time() - start_time
-        self.log.debug('Update DB packages duration -> %s s', int(time_elapsed))
+        self.log.debug('Update DB packages duration -> %s s (shlomi stop_start {})', int(time_elapsed), stop_start)
 
     def update_seed_provider(self):
         seed_provider = [{
@@ -3515,12 +3519,12 @@ class BaseScyllaCluster:  # pylint: disable=too-many-public-methods, too-many-in
         if new_scylla_bin:
             self._update_db_binary(new_scylla_bin, node_list)
 
-    def update_db_packages(self, node_list=None):
+    def update_db_packages(self, node_list=None, stop_start=True):
         new_scylla_bin = self.params.get('update_db_packages')
         if new_scylla_bin:
             if node_list is None:
                 node_list = self.nodes
-            self._update_db_packages(new_scylla_bin, node_list)
+            self._update_db_packages(new_scylla_bin, node_list, stop_start)
 
     def get_node_info_list(self, verification_node):
         """
@@ -3831,6 +3835,10 @@ class BaseScyllaCluster:  # pylint: disable=too-many-public-methods, too-many-in
                 self._scylla_install(node)
             else:
                 self._wait_for_preinstalled_scylla(node)
+            # Shlomi Upgrade Scylla
+            self.log.info("Shlomi node {} is beeing upgraded before start".format(node))
+            self.update_db_packages([node],False)
+
             if node.is_nonroot_install:
                 node.stop_scylla_server(verify_down=False)
                 node.remoter.run(f'{INSTALL_DIR}/sbin/scylla_setup --no-raid-setup --no-io-setup', ignore_status=True)
@@ -3961,7 +3969,8 @@ class BaseScyllaCluster:  # pylint: disable=too-many-public-methods, too-many-in
         """
         node_list = node_list or self.nodes
         self.update_db_binary(node_list)
-        self.update_db_packages(node_list)
+        #moving upgrade before node is started
+        #self.update_db_packages(node_list)
         self.get_scylla_version()
 
         wait.wait_for(self.verify_logging_from_nodes, nodes_list=node_list,
