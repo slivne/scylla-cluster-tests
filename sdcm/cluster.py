@@ -3498,7 +3498,7 @@ class BaseScyllaCluster:  # pylint: disable=too-many-public-methods, too-many-in
                self.run_func_parallel(func=start_scylla, node_list=self.non_seed_nodes)  # pylint: disable=no-member
 
         time_elapsed = time.time() - start_time
-        self.log.debug('Update DB packages duration -> %s s (shlomi stop_start {})', int(time_elapsed), stop_start)
+        self.log.debug('Update DB packages duration -> %s s (shlomi stop_start %s)', int(time_elapsed), stop_start)
 
     def update_seed_provider(self):
         seed_provider = [{
