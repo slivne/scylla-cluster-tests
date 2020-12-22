@@ -2445,6 +2445,7 @@ class Nemesis:  # pylint: disable=too-many-instance-attributes,too-many-public-m
             self.log.info("Rack deletion is not supported on kubernetes yet. "
                           "Please see https://github.com/scylladb/scylla-operator/issues/287")
         add_nodes_number = self.tester.params.get('nemesis_add_node_cnt')
+        stress_add_cmd = self.tester.params.get('stress_add_cmd')
         self.target_node.running_nemesis = None
         self._set_current_disruption("GrowCluster")
         self.log.info("Start grow cluster on %s nodes", add_nodes_number)
@@ -2454,6 +2455,10 @@ class Nemesis:  # pylint: disable=too-many-instance-attributes,too-many-public-m
             added_node.running_nemesis = None
             InfoEvent(message='GrowCluster - Done adding New node').publish()
             self.log.info("New node added %s", added_node.name)
+            time.sleep(self.interval)
+            self.run_stress_thread(stress_cmd=stress_add_cmd,
+                                      stats_aggregate_cmds=False,
+                                      round_robin=self.tester.params.get('round_robin')))
             time.sleep(self.interval)
         self.log.info("Finish cluster grow")
 
