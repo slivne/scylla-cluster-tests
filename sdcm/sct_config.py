@@ -459,6 +459,12 @@ class SCTConfiguration(dict):
                     be provided by the test suite infrastructure.
                     multiple commands can passed as a list"""),
 
+        dict(name="stress_add_cmd", env="SCT_STRESS_ADD_CMD", type=str_or_list,
+             help="""cassandra-stress commands.
+                    You can specify everything but the -node parameter, which is going to
+                    be provided by the test suite infrastructure.
+                    multiple commands can passed as a list"""),
+
         dict(name="gemini_version", env="SCT_GEMINI_VERSION", type=str,
              help="""Version of download of the binaries of gemini tool"""),
 
