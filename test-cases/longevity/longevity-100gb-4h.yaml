@@ -13,7 +13,7 @@ prepare_write_cmd: ["cassandra-stress write cl=ALL n=40971520 -schema 'replicati
                    ]
 
 stress_cmd: ["cassandra-stress write no-warmup cl=QUORUM duration=240m -schema 'replication(factor=3) compaction(strategy=SizeTieredCompactionStrategy)' -port jmx=6868 -mode cql3 native -rate threads=10 throttle=10000/s -pop dist='gaussian(1..409715200)' -col 'n=FIXED(1) size=FIXED(512)' -log interval=5",
-            "cassandra-stress read  no-warmup cl=QUORUM duration=240m -schema 'replication(factor=3) compaction(strategy=SizeTieredCompactionStrategy)' -port jmx=6868 -mode cql3 native -rate threads=75 throttle=75000/s -pop dist='gaussian(1..409715200)' -col 'n=FIXED(1) size=FIXED(512)' -log interval=5 -errors ignore"
+            "cassandra-stress read  no-warmup cl=QUORUM duration=240m -schema 'replication(factor=3) compaction(strategy=SizeTieredCompactionStrategy)' -port jmx=6868 -mode cql3 native -rate threads=50 throttle=50000/s -pop dist='gaussian(1..409715200)' -col 'n=FIXED(1) size=FIXED(512)' -log interval=5 -errors ignore"
             ]
 
 stress_add_cmd: ["cassandra-stress read  no-warmup cl=QUORUM duration=240m -schema 'replication(factor=3) compaction(strategy=SizeTieredCompactionStrategy)' -port jmx=6868 -mode cql3 native -rate threads=25 throttle=25000/s -pop dist='gaussian(1..409715200)' -col 'n=FIXED(1) size=FIXED(512)' -log interval=5 -errors ignore",
