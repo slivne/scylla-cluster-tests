@@ -16,7 +16,7 @@ stress_cmd: ["cassandra-stress write no-warmup cl=QUORUM duration=240m -schema '
             "cassandra-stress read  no-warmup cl=QUORUM duration=240m -schema 'replication(factor=3) compaction(strategy=SizeTieredCompactionStrategy)' -port jmx=6868 -mode cql3 native -rate threads=100 throttle=25000/s -pop dist='gaussian(1..409715200)' -col 'n=FIXED(1) size=FIXED(512)' -log interval=5 -errors ignore"
             ]
 
-stress_add_cmd: "cassandra-stress read  no-warmup cl=QUORUM duration=240m -schema 'replication(factor=3) compaction(strategy=SizeTieredCompactionStrategy)' -port jmx=6868 -mode cql3 native -rate threads=25 throttle=25000/s -pop dist='gaussian(1..409715200)' -col 'n=FIXED(1) size=FIXED(512)' -log interval=5 -errors ignore"
+stress_add_cmd: "cassandra-stress read  no-warmup cl=QUORUM duration=240m -schema 'replication(factor=3) compaction(strategy=SizeTieredCompactionStrategy)' -port jmx=6868 -mode cql3 native -rate threads=20 throttle=5000/s -pop dist='gaussian(1..409715200)' -col 'n=FIXED(1) size=FIXED(512)' -log interval=5 -errors ignore"
 
 n_db_nodes: 6
 n_loaders: 12
