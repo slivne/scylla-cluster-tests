@@ -2457,7 +2457,7 @@ class Nemesis:  # pylint: disable=too-many-instance-attributes,too-many-public-m
             self.log.info("New node added %s", added_node.name)
             time.sleep(self.interval)
             self.tester.run_stress_thread(stress_cmd=stress_add_cmd,
-                                      stats_aggregate_cmds=False,
+                                      stats_aggregate_cmds=True,
                                       round_robin=self.tester.params.get('round_robin'))
             time.sleep(self.interval)
         self.log.info("Finish cluster grow")
