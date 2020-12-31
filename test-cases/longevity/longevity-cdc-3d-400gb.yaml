@@ -20,8 +20,8 @@ round_robin: true
 
 instance_type_db: 'i3.4xlarge'
 
-nemesis_class_name: 'ChaosMonkey'
+nemesis_class_name: 'NoOpMonkey'
 nemesis_interval: 5
 nemesis_during_prepare: false
 
-user_prefix: 'longevity-cdc-3d-400gb'
+user_prefix: 'shlomi-longevity-cdc-3d-400gb'
