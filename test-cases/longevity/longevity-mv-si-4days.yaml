@@ -8,7 +8,6 @@ stress_read_cmd: ["cassandra-stress user profile=/tmp/c-s_profile_4mv_5queries.y
                   "cassandra-stress user profile=/tmp/c-s_profile_2si_2queries.yaml ops'(insert=10,si_p_read1=1,si_p_read2=1)' cl=QUORUM duration=5760m -port jmx=6868 -mode cql3 native -rate threads=10"
 
                  ]
-run_fullscan: 'random, 15'
 
 n_db_nodes: 5
 n_loaders: 2
@@ -16,13 +15,8 @@ n_monitor_nodes: 1
 
 instance_type_db: 'i3.4xlarge'
 
-nemesis_class_name: 'ChaosMonkey'
+nemesis_class_name: 'TerminateAndRemoveNodeMonkey'
 nemesis_interval: 30
+nemesis_during_prepare: false
 
-user_prefix: 'longevity-mv-si-4d'
-
-space_node_threshold: 644245
-
-# scylla-manager configuration
-# if running on aws and use_mgmt is true, the monitor image should not contain scylla
-use_mgmt: true
+user_prefix: 'shlomi-longevity-mv-si-4d'
